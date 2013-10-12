@@ -43,21 +43,31 @@
             break;
     }
     inSwipeAnimation.duration = duration;
+
+    CABasicAnimation * inPositionAnimation = [CABasicAnimation animationWithKeyPath:@"zPosition"];
+    inPositionAnimation.fromValue = @-0.001;
+    inPositionAnimation.toValue = @-0.001;
+    inPositionAnimation.duration = duration;
+
+    CAAnimationGroup * inAnimation = [CAAnimationGroup animation];
+    inAnimation.animations = @[inSwipeAnimation, inPositionAnimation];
+    inAnimation.duration = duration;
     
     CABasicAnimation * outOpacityAnimation = [CABasicAnimation animationWithKeyPath:@"opacity"];
-    outOpacityAnimation.fromValue = [NSNumber numberWithFloat:1.0f];
-    outOpacityAnimation.toValue = [NSNumber numberWithFloat:0.0f];
+    outOpacityAnimation.fromValue = @1.0f;
+    outOpacityAnimation.toValue = @0.0f;
+    outOpacityAnimation.duration = duration;
     
     CABasicAnimation * outPositionAnimation = [CABasicAnimation animationWithKeyPath:@"zPosition"];
-    outPositionAnimation.fromValue = [NSNumber numberWithDouble:-0.001f];
-    outPositionAnimation.toValue = [NSNumber numberWithDouble:-0.001f];
+    outPositionAnimation.fromValue = @-0.01;
+    outPositionAnimation.toValue = @-0.01;
     outPositionAnimation.duration = duration;
     
     CAAnimationGroup * outAnimation = [CAAnimationGroup animation];
     [outAnimation setAnimations:@[outOpacityAnimation, outPositionAnimation]];
     outAnimation.duration = duration;
     
-    self = [super initWithInAnimation:inSwipeAnimation andOutAnimation:outAnimation];
+    self = [super initWithInAnimation:inAnimation andOutAnimation:outAnimation];
     return self;
 }
 
