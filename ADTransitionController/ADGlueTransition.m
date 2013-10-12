@@ -59,6 +59,16 @@
             NSAssert(FALSE, @"Unhandled ADTransitionOrientation");
             break;
     }
+    inSwipeAnimation.duration = duration;
+
+    CABasicAnimation * inPositionAnimation = [CABasicAnimation animationWithKeyPath:@"zPosition"];
+    inPositionAnimation.fromValue = @-0.001;
+    inPositionAnimation.toValue = @-0.001;
+    inPositionAnimation.duration = duration;
+
+    CAAnimationGroup * inAnimation = [CAAnimationGroup animation];
+    inAnimation.animations = @[inSwipeAnimation, inPositionAnimation];
+    inAnimation.duration = duration;
     
     CATransform3D endTranslation = CATransform3DTranslate(startTranslation, 0, 0, -viewWidth * 0.7f);
     
@@ -71,15 +81,13 @@
     outTransformKeyFrameAnimation.timingFunctions = [self getCircleApproximationTimingFunctions];
     
     CAKeyframeAnimation * outOpacityKeyFrameAnimation = [CAKeyframeAnimation animationWithKeyPath:@"opacity"];
-    outOpacityKeyFrameAnimation.values = @[[NSNumber numberWithFloat:1.0f], [NSNumber numberWithFloat:1.0f], [NSNumber numberWithFloat:0.0f]];
+    outOpacityKeyFrameAnimation.values = @[@1.0f, @1.0f, @0.0f];
     
     CAAnimationGroup * outAnimation = [CAAnimationGroup animation];
     [outAnimation setAnimations:@[outOpacityKeyFrameAnimation, outTransformKeyFrameAnimation, outAnchorPointAnimation]];
-    
-    inSwipeAnimation.duration = duration;
     outAnimation.duration = duration;
     
-    self = [super initWithInAnimation:inSwipeAnimation andOutAnimation:outAnimation];
+    self = [super initWithInAnimation:inAnimation andOutAnimation:outAnimation];
     return self;
 }
 
